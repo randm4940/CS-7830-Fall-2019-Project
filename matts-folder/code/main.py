@@ -141,15 +141,20 @@ if __name__ == "__main__":
     #         reduced_features.append(feature)
 
     X_train, X_test, y_train, y_test = train_test_split(data_values, target,
-                                                        test_size=0.33, random_state=1)
+                                                        test_size=0.30, random_state=1)
 
     clf = MLPClassifier(activation='tanh', alpha=0.0001, hidden_layer_sizes=(5, 3, 2), learning_rate='constant',
                         learning_rate_init=0.1, solver='sgd')
 
     clf.fit(X_train, y_train)
 
+    y_true, y_pred = y_test, clf.predict(X_test)
+
+    from sklearn.metrics import classification_report
     print("Training set score: %f" % clf.score(X_train, y_train))
-    print("Test set score: %f" % clf.score(X_test, y_test))
+
+    print('Results on the test set:')
+    print(classification_report(y_true, y_pred))
 
     # print('Selected Features:')
     # print(str(reduced_features))
