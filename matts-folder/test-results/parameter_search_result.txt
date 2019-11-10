@@ -1,0 +1,51 @@
+Best parameters found:
+ {'activation': 'tanh', 'alpha': 20, 'hidden_layer_sizes': (5, 3), 'learning_rate': 'constant', 'solver': 'lbfgs'}
+Results on the test set:
+              precision    recall  f1-score   support
+
+           0       0.93      0.78      0.85        50
+           1       0.81      0.94      0.87        50
+
+    accuracy                           0.86       100
+   macro avg       0.87      0.86      0.86       100
+weighted avg       0.87      0.86      0.86       100
+
+Done
+
+
+Best parameters found:
+ {'activation': 'tanh', 'alpha': 1, 'hidden_layer_sizes': (5,), 'learning_rate': 'adaptive', 'learning_rate_init': 0.01, 'solver': 'sgd'}
+Results on the test set:
+              precision    recall  f1-score   support
+
+           0       0.85      0.83      0.84        42
+           1       0.88      0.90      0.89        58
+
+    accuracy                           0.87       100
+   macro avg       0.87      0.86      0.87       100
+weighted avg       0.87      0.87      0.87       100
+
+Done
+
+
+Best parameters found:
+ {'activation': 'tanh', 'alpha': 0, 'hidden_layer_sizes': (5, 3, 2), 'learning_rate': 'constant', 'learning_rate_init': 0.1, 'solver': 'sgd'}
+Results on the test set:
+              precision    recall  f1-score   support
+
+           0       0.73      0.93      0.81        40
+           1       0.93      0.73      0.81        51
+
+    accuracy                           0.81        91
+   macro avg       0.83      0.83      0.81        91
+weighted avg       0.84      0.81      0.81        91
+
+Done
+
+
+
+clf = MLPClassifier(activation='tanh', alpha=0.0001, hidden_layer_sizes=(5, 3, 2), learning_rate='constant',
+                        learning_rate_init=0.1, solver='sgd')
+
+Training set score: 0.871921
+Test set score: 0.840000

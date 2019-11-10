@@ -9,10 +9,54 @@ from sklearn.feature_selection import SelectFromModel
 from sklearn.neural_network import MLPClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.decomposition import PCA
+from sklearn.utils.testing import ignore_warnings
+from sklearn.exceptions import ConvergenceWarning
 
 
 def read_heart_data():
     return pd.read_csv('../../heart.csv')
+
+
+def parameter_optimization(df):
+    import warnings
+    warnings.simplefilter('once', ConvergenceWarning)
+
+    shuffled_data = df.sample(frac=1)
+    data = shuffled_data.drop('target', axis=1)
+    target = shuffled_data['target'].values
+    data_values = feature_scaling(data)
+    X_train, X_test, y_train, y_test = train_test_split(data_values, target,
+                                                        test_size=0.30, random_state=1)
+
+    mlp = MLPClassifier(max_iter=2000)
+    parameter_space = {
+        'hidden_layer_sizes': [(5,), (6,), (7,), (8,), (9,), (5, 3),  (5, 4),  (6, 3),  (6, 4), (5, 3, 2),
+                               (5, 3, 3), ],
+        'activation': ['tanh', 'relu'],
+        'solver': ['lbfgs', 'sgd', 'adam'],
+        'alpha': [0.0001, 0.05, 0, 0.01, 1, 10, 20, 25, 30],
+        'learning_rate': ['constant', 'adaptive'],
+        'learning_rate_init': [0.001, 0.01, 0.05, 0.1, 0.5]
+    }
+
+    from sklearn.model_selection import GridSearchCV
+    clf = GridSearchCV(mlp, parameter_space, n_jobs=-1, cv=3)
+    clf.fit(X_train, y_train)
+
+    # Best parameter set
+    print('Best parameters found:\n', clf.best_params_)
+
+    # All results
+    means = clf.cv_results_['mean_test_score']
+    stds = clf.cv_results_['std_test_score']
+    # for mean, std, params in zip(means, stds, clf.cv_results_['params']):
+    #     print("%0.3f (+/-%0.03f) for %r" % (mean, std * 2, params))
+
+    y_true, y_pred = y_test, clf.predict(X_test)
+
+    from sklearn.metrics import classification_report
+    print('Results on the test set:')
+    print(classification_report(y_true, y_pred))
 
 
 def print_count_of_target(target, df):
@@ -59,49 +103,57 @@ def feature_scaling(df):
 
 if __name__ == "__main__":
     df = read_heart_data()
-    pd.set_option('display.max_columns', 20)
-    pd.set_option('display.width', 120)
-    print(df.head(10))
 
-    # show how many of each target we have
-    # print_count_of_target('target', df)
+    # One-hot encode chest pain
+    df['cp'][df['cp'] == 0] = 'typical angina'
+    df['cp'][df['cp'] == 1] = 'atypical angina'
+    df['cp'][df['cp'] == 2] = 'non-anginal pain'
+    df['cp'][df['cp'] == 3] = 'asymptomatic'
+    df['cp'] = df['cp'].astype('object')
+    df = pd.get_dummies(df)
 
-    # get data without target values
-    data = df.drop('target', axis=1)
+    pd.set_option('display.max_columns', 25)
+    pd.set_option('display.width', 200)
+    print(df.head(20))
 
-    # do some feature scaling
-    transformed_data = feature_scaling(data)
+    # This takes a long time, but goes through an exhaustive search over different parameter values:
+    # parameter_optimization(df)
 
-    # now look at feature reduction
-    target = df['target'].values
+    # Get data values
+    shuffled_data = df.sample(frac=1)
+    data = shuffled_data.drop('target', axis=1)
+    target = shuffled_data['target'].values
+    data_values = feature_scaling(data)
+
 
     # PCA
-    run_pca(transformed_data)
+    # run_pca(transformed_data)
 
     # comment this out for now
     # reduced_data, feature_index = feature_reduction(transformed_data, target)
     # print(reduced_data.shape)
 
     # print the list of features that were selected from the feature reduction
-    reduced_features = []
-    feature_names = list(data.columns.values)
-    for was_selected, feature in zip(feature_index, feature_names):
-        if was_selected:
-            reduced_features.append(feature)
+    # reduced_features = []
+    # feature_names = list(data.columns.values)
+    # for was_selected, feature in zip(feature_index, feature_names):
+    #     if was_selected:
+    #         reduced_features.append(feature)
 
-    X_train, X_test, y_train, y_test = train_test_split(data, target,
-                                                        test_size = 0.33, random_state = 42)
+    X_train, X_test, y_train, y_test = train_test_split(data_values, target,
+                                                        test_size=0.33, random_state=1)
 
-    clf = MLPClassifier(solver='lbfgs', alpha=1e-5,
-                        hidden_layer_sizes=(5, 2), random_state=1)
+    clf = MLPClassifier(activation='tanh', alpha=0.0001, hidden_layer_sizes=(5, 3, 2), learning_rate='constant',
+                        learning_rate_init=0.1, solver='sgd')
 
     clf.fit(X_train, y_train)
 
-    print('Selected Features:')
-    print(str(reduced_features))
+    print("Training set score: %f" % clf.score(X_train, y_train))
+    print("Test set score: %f" % clf.score(X_test, y_test))
+
+    # print('Selected Features:')
+    # print(str(reduced_features))
+
     print('Done')
-
-
-
 
 
