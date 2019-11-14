@@ -11,6 +11,9 @@ from sklearn.model_selection import train_test_split
 from sklearn.decomposition import PCA
 from sklearn.utils.testing import ignore_warnings
 from sklearn.exceptions import ConvergenceWarning
+from sklearn.metrics import confusion_matrix
+from sklearn.metrics import f1_score
+from sklearn.metrics import roc_curve
 
 
 def read_heart_data():
@@ -86,12 +89,40 @@ def run_pca(x_scaled):
 
 def feature_reduction(df, target):
     # Before feature reduction to remove features that don't impact the output significantly
-    tree = ExtraTreesClassifier(n_estimators=100)
+    tree = ExtraTreesClassifier(n_estimators=200)
     tree.fit(df, target)
     model = SelectFromModel(tree, prefit=True)
     feature_index = model.get_support()
     data_new = model.transform(df)
     return [data_new, feature_index]
+
+
+def feature_importance(x, y):
+    # Build a forest and compute the feature importances
+    forest = ExtraTreesClassifier(n_estimators=250,
+                                  random_state=0)
+
+    forest.fit(x, y)
+    importances = forest.feature_importances_
+    std = np.std([tree.feature_importances_ for tree in forest.estimators_],
+                 axis=0)
+    indices = np.argsort(importances)[::-1]
+
+    # Print the feature ranking
+    print("Feature ranking:")
+
+    for f in range(x.shape[1]):
+        print("%d. feature %d (%f)" % (f + 1, indices[f], importances[indices[f]]))
+
+    # Plot the feature importances of the forest
+    plt.figure()
+    plt.title("Feature importances")
+    plt.bar(range(x.shape[1]), importances[indices],
+            color="r", yerr=std[indices], align="center")
+    plt.xticks(range(x.shape[1]), indices)
+    plt.xlim([-1, x.shape[1]])
+    plt.show()
+    print('Done')
 
 
 def feature_scaling(df):
@@ -101,7 +132,71 @@ def feature_scaling(df):
     return scaler.transform(df)
 
 
+def train(df):
+    # Get data values
+    f1_scores = []
+    for i in range(0, 10):
+        shuffled_data = df.sample(frac=1)
+        data = shuffled_data.drop('target', axis=1)
+        target = shuffled_data['target'].values
+        data_values = feature_scaling(data)
+
+        # Feature Importance
+        # feature_importance(data_values, target)
+
+        # PCA
+        # run_pca(transformed_data)
+
+        # comment this out for now
+        # reduced_data, feature_index = feature_reduction(transformed_data, target)
+        # print(reduced_data.shape)
+
+        # print the list of features that were selected from the feature reduction
+        # reduced_features = []
+        # feature_names = list(data.columns.values)
+        # for was_selected, feature in zip(feature_index, feature_names):
+        #     if was_selected:
+        #         reduced_features.append(feature)
+
+        X_train, X_test, y_train, y_test = train_test_split(data_values, target,
+                                                            test_size=0.30, random_state=1)
+
+        clf = MLPClassifier(activation='tanh', alpha=0.0001, hidden_layer_sizes=(5, 3, 2), learning_rate='constant',
+                            learning_rate_init=0.1, solver='sgd')
+
+        clf.fit(X_train, y_train)
+
+        y_true, y_pred = y_test, clf.predict(X_test)
+
+        print('------------------')
+        print('Iteration', i + 1)
+        from sklearn.metrics import classification_report
+        print("Training set score: %f" % clf.score(X_train, y_train))
+
+        print('Results on the test set:')
+        print(classification_report(y_true, y_pred))
+
+        conf_matrix = confusion_matrix(y_true, y_pred)
+        total = sum(sum(conf_matrix))
+        sensitivity = conf_matrix[0, 0] / (conf_matrix[0, 0] + conf_matrix[1, 0])
+        print('Sensitivity : ', sensitivity)
+
+        specificity = conf_matrix[1, 1] / (conf_matrix[1, 1] + conf_matrix[0, 1])
+        print('Specificity : ', specificity)
+
+        f1 = f1_score(y_true, y_pred)
+        print('F1 Score: ', f1)
+        f1_scores.append(f1)
+
+        print('------------------\n')
+        # print('Selected Features:')
+        # print(str(reduced_features))
+
+    avg_f1_score = np.mean(f1_scores)
+    print('Average F1 Score: ', avg_f1_score)
+
 if __name__ == "__main__":
+    np.random.seed(1)
     df = read_heart_data()
 
     # One-hot encode chest pain
@@ -119,45 +214,8 @@ if __name__ == "__main__":
     # This takes a long time, but goes through an exhaustive search over different parameter values:
     # parameter_optimization(df)
 
-    # Get data values
-    shuffled_data = df.sample(frac=1)
-    data = shuffled_data.drop('target', axis=1)
-    target = shuffled_data['target'].values
-    data_values = feature_scaling(data)
+    train(df)
 
-
-    # PCA
-    # run_pca(transformed_data)
-
-    # comment this out for now
-    # reduced_data, feature_index = feature_reduction(transformed_data, target)
-    # print(reduced_data.shape)
-
-    # print the list of features that were selected from the feature reduction
-    # reduced_features = []
-    # feature_names = list(data.columns.values)
-    # for was_selected, feature in zip(feature_index, feature_names):
-    #     if was_selected:
-    #         reduced_features.append(feature)
-
-    X_train, X_test, y_train, y_test = train_test_split(data_values, target,
-                                                        test_size=0.30, random_state=1)
-
-    clf = MLPClassifier(activation='tanh', alpha=0.0001, hidden_layer_sizes=(5, 3, 2), learning_rate='constant',
-                        learning_rate_init=0.1, solver='sgd')
-
-    clf.fit(X_train, y_train)
-
-    y_true, y_pred = y_test, clf.predict(X_test)
-
-    from sklearn.metrics import classification_report
-    print("Training set score: %f" % clf.score(X_train, y_train))
-
-    print('Results on the test set:')
-    print(classification_report(y_true, y_pred))
-
-    # print('Selected Features:')
-    # print(str(reduced_features))
 
     print('Done')
 
