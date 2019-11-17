@@ -15,8 +15,9 @@ from sklearn.metrics import confusion_matrix
 from sklearn.metrics import f1_score
 from sklearn.metrics import roc_curve
 from sklearn.metrics import accuracy_score
+from sklearn.metrics import auc
 import shap  #for SHAP values
-
+import scikitplot as skplt
 
 def read_heart_data():
     return pd.read_csv('../../heart.csv')
@@ -172,6 +173,12 @@ def train(df):
         clf.fit(X_train, y_train)
 
         y_true, y_pred = y_test, clf.predict(X_test)
+        y_proba = clf.predict_proba(X_test)
+
+        # ROC AUC Curve
+        if i == 2:
+            skplt.metrics.plot_roc_curve(y_true, y_proba)
+            plt.show()
 
         print('------------------')
         print('Iteration', i + 1)
