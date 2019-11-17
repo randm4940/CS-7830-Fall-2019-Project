@@ -14,6 +14,7 @@ from sklearn.exceptions import ConvergenceWarning
 from sklearn.metrics import confusion_matrix
 from sklearn.metrics import f1_score
 from sklearn.metrics import roc_curve
+from sklearn.metrics import accuracy_score
 
 
 def read_heart_data():
@@ -33,13 +34,14 @@ def parameter_optimization(df):
 
     mlp = MLPClassifier(max_iter=2000)
     parameter_space = {
-        'hidden_layer_sizes': [(5,), (6,), (7,), (8,), (9,), (5, 3),  (5, 4),  (6, 3),  (6, 4), (5, 3, 2),
-                               (5, 3, 3), ],
+        'hidden_layer_sizes': [(6,), (7,), (8,), (6, 3),  (6, 4), (5, 3, 2),
+                               (7, 3), ],
         'activation': ['tanh', 'relu'],
         'solver': ['lbfgs', 'sgd', 'adam'],
-        'alpha': [0.0001, 0.05, 0, 0.01, 1, 10, 20, 25, 30],
+        'alpha': [0.0001, 0.05, 0.01, 1, 10, 20],
         'learning_rate': ['constant', 'adaptive'],
-        'learning_rate_init': [0.001, 0.01, 0.05, 0.1, 0.5]
+        'learning_rate_init': [0.001, 0.01, 0.05, 0.1, 0.5],
+        'early_stopping': [True, False]
     }
 
     from sklearn.model_selection import GridSearchCV
@@ -135,6 +137,8 @@ def feature_scaling(df):
 def train(df):
     # Get data values
     f1_scores = []
+    accuracies = []
+
     for i in range(0, 10):
         shuffled_data = df.sample(frac=1)
         data = shuffled_data.drop('target', axis=1)
@@ -161,8 +165,8 @@ def train(df):
         X_train, X_test, y_train, y_test = train_test_split(data_values, target,
                                                             test_size=0.30, random_state=1)
 
-        clf = MLPClassifier(activation='tanh', alpha=0.0001, hidden_layer_sizes=(5, 3, 2), learning_rate='constant',
-                            learning_rate_init=0.1, solver='sgd')
+        clf = MLPClassifier(activation='tanh', alpha=0.05, hidden_layer_sizes=(7, 3), learning_rate='constant',
+                            learning_rate_init=0.001, solver='sgd', max_iter=1000)
 
         clf.fit(X_train, y_train)
 
@@ -177,9 +181,11 @@ def train(df):
         print(classification_report(y_true, y_pred))
 
         conf_matrix = confusion_matrix(y_true, y_pred)
-        total = sum(sum(conf_matrix))
+        print("Confusion Matrix:")
+        print(conf_matrix)
+
         sensitivity = conf_matrix[0, 0] / (conf_matrix[0, 0] + conf_matrix[1, 0])
-        print('Sensitivity : ', sensitivity)
+        print('\nSensitivity : ', sensitivity)
 
         specificity = conf_matrix[1, 1] / (conf_matrix[1, 1] + conf_matrix[0, 1])
         print('Specificity : ', specificity)
@@ -188,12 +194,19 @@ def train(df):
         print('F1 Score: ', f1)
         f1_scores.append(f1)
 
+        accuracy = accuracy_score(y_true, y_pred)
+        accuracies.append(accuracy)
+        print('Accuracy: ', accuracy)
+
+
         print('------------------\n')
         # print('Selected Features:')
         # print(str(reduced_features))
 
     avg_f1_score = np.mean(f1_scores)
     print('Average F1 Score: ', avg_f1_score)
+    avg_accuracy = np.mean(accuracies)
+    print('Average Accuracy: ', avg_accuracy)
 
 if __name__ == "__main__":
     np.random.seed(1)
