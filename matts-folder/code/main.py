@@ -15,6 +15,7 @@ from sklearn.metrics import confusion_matrix
 from sklearn.metrics import f1_score
 from sklearn.metrics import roc_curve
 from sklearn.metrics import accuracy_score
+import shap  #for SHAP values
 
 
 def read_heart_data():
@@ -166,7 +167,7 @@ def train(df):
                                                             test_size=0.30, random_state=1)
 
         clf = MLPClassifier(activation='tanh', alpha=0.05, hidden_layer_sizes=(7, 3), learning_rate='constant',
-                            learning_rate_init=0.001, solver='sgd', max_iter=1000)
+                            learning_rate_init=0.001, solver='sgd', max_iter=2000)
 
         clf.fit(X_train, y_train)
 
