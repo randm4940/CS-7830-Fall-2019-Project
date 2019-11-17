@@ -141,7 +141,7 @@ def train(df):
     f1_scores = []
     accuracies = []
 
-    for i in range(0, 10):
+    for i in range(0, 5):
         shuffled_data = df.sample(frac=1)
         data = shuffled_data.drop('target', axis=1)
         target = shuffled_data['target'].values
@@ -165,7 +165,7 @@ def train(df):
         #         reduced_features.append(feature)
 
         X_train, X_test, y_train, y_test = train_test_split(data_values, target,
-                                                            test_size=0.30, random_state=1)
+                                                            test_size=0.20, random_state=1)
 
         clf = MLPClassifier(activation='tanh', alpha=0.05, hidden_layer_sizes=(7, 3), learning_rate='constant',
                             learning_rate_init=0.001, solver='sgd', max_iter=2000)
@@ -177,7 +177,7 @@ def train(df):
 
         # ROC AUC Curve
         if i == 2:
-            skplt.metrics.plot_roc_curve(y_true, y_proba)
+            skplt.metrics.plot_roc(y_true, y_proba)
             plt.show()
 
         print('------------------')
