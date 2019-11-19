@@ -16,6 +16,8 @@ from sklearn.metrics import f1_score
 from sklearn.metrics import roc_curve
 from sklearn.metrics import accuracy_score
 from sklearn.metrics import auc
+from sklearn.metrics import precision_score
+from sklearn.metrics import recall_score
 import shap  #for SHAP values
 import scikitplot as skplt
 
@@ -137,9 +139,13 @@ def feature_scaling(df):
 
 
 def train(df):
-    # Get data values
+    # Store average data values
+    precisions = []
+    recalls = []
     f1_scores = []
     accuracies = []
+    sensitivities = []
+    specificities = []
 
     for i in range(0, 5):
         shuffled_data = df.sample(frac=1)
@@ -167,7 +173,7 @@ def train(df):
         X_train, X_test, y_train, y_test = train_test_split(data_values, target,
                                                             test_size=0.20, random_state=1)
 
-        clf = MLPClassifier(activation='tanh', alpha=0.05, hidden_layer_sizes=(7, 3), learning_rate='constant',
+        clf = MLPClassifier(activation='tanh', alpha=0.05, hidden_layer_sizes=(8, 3), learning_rate='constant',
                             learning_rate_init=0.001, solver='sgd', max_iter=2000)
 
         clf.fit(X_train, y_train)
@@ -176,7 +182,7 @@ def train(df):
         y_proba = clf.predict_proba(X_test)
 
         # ROC AUC Curve
-        if i == 2:
+        if i == 1:
             skplt.metrics.plot_roc(y_true, y_proba)
             plt.show()
 
@@ -185,36 +191,55 @@ def train(df):
         from sklearn.metrics import classification_report
         print("Training set score: %f" % clf.score(X_train, y_train))
 
-        print('Results on the test set:')
-        print(classification_report(y_true, y_pred))
+        # print('Results on the test set:')
+        # print(classification_report(y_true, y_pred))
 
         conf_matrix = confusion_matrix(y_true, y_pred)
         print("Confusion Matrix:")
         print(conf_matrix)
 
+        precision = precision_score(y_true, y_pred)
+        print('\nPrecision:', precision)
+        precisions.append(precision)
+
+        recall = recall_score(y_true, y_pred)
+        print('Recall: ', recall)
+        recalls.append(recall)
+
         sensitivity = conf_matrix[0, 0] / (conf_matrix[0, 0] + conf_matrix[1, 0])
-        print('\nSensitivity : ', sensitivity)
+        print('Sensitivity : ', sensitivity)
+        sensitivities.append(sensitivity)
 
         specificity = conf_matrix[1, 1] / (conf_matrix[1, 1] + conf_matrix[0, 1])
         print('Specificity : ', specificity)
+        specificities.append(specificity)
 
         f1 = f1_score(y_true, y_pred)
-        print('F1 Score: ', f1)
+        print('\nF1 Score: ', f1)
         f1_scores.append(f1)
 
         accuracy = accuracy_score(y_true, y_pred)
         accuracies.append(accuracy)
         print('Accuracy: ', accuracy)
 
-
         print('------------------\n')
         # print('Selected Features:')
         # print(str(reduced_features))
 
+    # Print averages
+    avg_precision = np.mean(precisions)
+    print('Average Precision: ', avg_precision)
+    avg_recall = np.mean(recalls)
+    print('Average Recall: ', avg_recall)
+    avg_sensitivity = np.mean(sensitivities)
+    print('Average Sensitivity: ', avg_sensitivity)
+    avg_specificity = np.mean(specificities)
+    print('Average Specificity: ', avg_specificity)
     avg_f1_score = np.mean(f1_scores)
-    print('Average F1 Score: ', avg_f1_score)
+    print('\nAverage F1 Score: ', avg_f1_score)
     avg_accuracy = np.mean(accuracies)
     print('Average Accuracy: ', avg_accuracy)
+
 
 if __name__ == "__main__":
     np.random.seed(1)
@@ -225,7 +250,12 @@ if __name__ == "__main__":
     df['cp'][df['cp'] == 1] = 'atypical angina'
     df['cp'][df['cp'] == 2] = 'non-anginal pain'
     df['cp'][df['cp'] == 3] = 'asymptomatic'
-    df['cp'] = df['cp'].astype('object')
+
+    # One-hot encode thal
+    df['thal'][df['thal'] == 1] = 'normal'
+    df['thal'][df['thal'] == 2] = 'fixed defect'
+    df['thal'][df['thal'] == 3] = 'reversable defect'
+    df['thal'] = df['thal'].astype('object')
     df = pd.get_dummies(df)
 
     pd.set_option('display.max_columns', 25)
