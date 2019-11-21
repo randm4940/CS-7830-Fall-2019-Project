@@ -1,0 +1,26 @@
+Best Results
+----------------------
+Training set score: 0.855372
+Confusion Matrix:
+[[23  4]
+ [ 5 29]]
+Precision: 0.8787878787878788
+Recall:  0.8529411764705882
+Sensitivity :  0.8214285714285714
+Specificity :  0.8787878787878788
+
+ROC AUC:  0.8523965141612201
+F1 Score:  0.8656716417910447
+Accuracy:  0.8524590163934426
+
+
+Averages over 5 iterations
+---------------------------
+Average Precision:  0.8516666666666668
+Average Recall:  0.8664573197700133
+Average Sensitivity:  0.8252196620583717
+Average Specificity:  0.8516666666666668
+
+Average ROC AUC Score:  0.8368524113348451
+Average F1 Score:  0.8565931646039304
+Average Accuracy:  0.839344262295082

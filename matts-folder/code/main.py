@@ -1,25 +1,26 @@
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
+import scikitplot as skplt
 import seaborn as sns
-
-from sklearn.preprocessing import StandardScaler
-from sklearn.ensemble import ExtraTreesClassifier
-from sklearn.feature_selection import SelectFromModel
-from sklearn.neural_network import MLPClassifier
-from sklearn.model_selection import train_test_split
+from scipy import interp
 from sklearn.decomposition import PCA
-from sklearn.utils.testing import ignore_warnings
+from sklearn.ensemble import ExtraTreesClassifier
 from sklearn.exceptions import ConvergenceWarning
+from sklearn.feature_selection import SelectFromModel
+from sklearn.metrics import accuracy_score
 from sklearn.metrics import confusion_matrix
 from sklearn.metrics import f1_score
-from sklearn.metrics import roc_curve
-from sklearn.metrics import accuracy_score
-from sklearn.metrics import auc
 from sklearn.metrics import precision_score
 from sklearn.metrics import recall_score
-import shap  #for SHAP values
-import scikitplot as skplt
+from sklearn.metrics import roc_auc_score
+from sklearn.model_selection import train_test_split
+from sklearn.neural_network import MLPClassifier
+from sklearn.preprocessing import StandardScaler
+from sklearn import svm, datasets
+from sklearn.metrics import roc_curve, auc
+from sklearn.model_selection import StratifiedKFold
+
 
 def read_heart_data():
     return pd.read_csv('../../heart.csv')
@@ -146,6 +147,11 @@ def train(df):
     accuracies = []
     sensitivities = []
     specificities = []
+    roc_auc_scores = []
+
+    tprs = []
+    aucs = []
+    mean_fpr = np.linspace(0, 1, 100)
 
     for i in range(0, 5):
         shuffled_data = df.sample(frac=1)
@@ -181,14 +187,8 @@ def train(df):
         y_true, y_pred = y_test, clf.predict(X_test)
         y_proba = clf.predict_proba(X_test)
 
-        # ROC AUC Curve
-        if i == 1:
-            skplt.metrics.plot_roc(y_true, y_proba)
-            plt.show()
-
         print('------------------')
         print('Iteration', i + 1)
-        from sklearn.metrics import classification_report
         print("Training set score: %f" % clf.score(X_train, y_train))
 
         # print('Results on the test set:')
@@ -197,6 +197,27 @@ def train(df):
         conf_matrix = confusion_matrix(y_true, y_pred)
         print("Confusion Matrix:")
         print(conf_matrix)
+
+        # ROC AUC Curve
+        # if i == 1:
+        #     skplt.metrics.plot_roc(y_true, y_proba)
+        #     plt.show()
+        #
+        #     # Plot confusion matrix
+        #     plt.figure(figsize=(10, 7))
+        #     sns.heatmap(conf_matrix, annot=True)
+        #     ax = plt.axes()
+        #     ax.set_title('MLP Confusion Matrix')
+        #     plt.show()
+
+        # Compute ROC curve and area the curve
+        fpr, tpr, thresholds = roc_curve(y_true, y_proba[:, 1])
+        tprs.append(interp(mean_fpr, fpr, tpr))
+        tprs[-1][0] = 0.0
+        roc_auc = auc(fpr, tpr)
+        aucs.append(roc_auc)
+        plt.plot(fpr, tpr, lw=1, alpha=0.3,
+                 label='ROC fold %d (AUC = %0.2f)' % (i, roc_auc))
 
         precision = precision_score(y_true, y_pred)
         print('\nPrecision:', precision)
@@ -214,8 +235,12 @@ def train(df):
         print('Specificity : ', specificity)
         specificities.append(specificity)
 
+        roc_score = roc_auc_score(y_true, y_pred)
+        print('\nROC AUC: ', roc_score)
+        roc_auc_scores.append(roc_score)
+
         f1 = f1_score(y_true, y_pred)
-        print('\nF1 Score: ', f1)
+        print('F1 Score: ', f1)
         f1_scores.append(f1)
 
         accuracy = accuracy_score(y_true, y_pred)
@@ -235,10 +260,38 @@ def train(df):
     print('Average Sensitivity: ', avg_sensitivity)
     avg_specificity = np.mean(specificities)
     print('Average Specificity: ', avg_specificity)
+    avg_roc_auc_score = np.mean(roc_auc_scores)
+    print('\nAverage ROC AUC: ', avg_roc_auc_score)
     avg_f1_score = np.mean(f1_scores)
-    print('\nAverage F1 Score: ', avg_f1_score)
+    print('Average F1 Score: ', avg_f1_score)
     avg_accuracy = np.mean(accuracies)
     print('Average Accuracy: ', avg_accuracy)
+
+    # Plot ROC
+    plt.plot([0, 1], [0, 1], linestyle='--', lw=2, color='r',
+             label='Chance', alpha=.8)
+
+    mean_tpr = np.mean(tprs, axis=0)
+    mean_tpr[-1] = 1.0
+    mean_auc = auc(mean_fpr, mean_tpr)
+    std_auc = np.std(aucs)
+    plt.plot(mean_fpr, mean_tpr, color='b',
+             label=r'Mean ROC (AUC = %0.2f $\pm$ %0.2f)' % (mean_auc, std_auc),
+             lw=2, alpha=.8)
+
+    std_tpr = np.std(tprs, axis=0)
+    tprs_upper = np.minimum(mean_tpr + std_tpr, 1)
+    tprs_lower = np.maximum(mean_tpr - std_tpr, 0)
+    plt.fill_between(mean_fpr, tprs_lower, tprs_upper, color='grey', alpha=.2,
+                     label=r'$\pm$ 1 std. dev.')
+
+    plt.xlim([-0.05, 1.05])
+    plt.ylim([-0.05, 1.05])
+    plt.xlabel('False Positive Rate')
+    plt.ylabel('True Positive Rate')
+    plt.title('MLP ROC')
+    plt.legend(loc="lower right")
+    plt.show()
 
 
 if __name__ == "__main__":
