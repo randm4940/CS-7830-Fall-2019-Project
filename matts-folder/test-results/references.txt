@@ -1,0 +1,11 @@
+Project References
+-------------------------
+https://www.healthypeople.gov/2020/topics-objectives/topic/heart-disease-and-stroke
+https://www.kaggle.com/ronitf/heart-disease-uci
+https://www.kaggle.com/tentotheminus9/what-causes-heart-disease-explaining-the-model
+https://www.kaggle.com/cdabakoglu/heart-disease-classifications-machine-learning
+https://www.cdc.gov/heartdisease/facts.htm
+https://towardsdatascience.com/predicting-presence-of-heart-diseases-using-machine-learning-36f00f3edb2c
+https://spectrum.ieee.org/the-human-os/biomedical/diagnostics/ai-predicts-heart-attacks-more-accurately-than-standard-doctor-method
+ - https://journals.plos.org/plosone/article/file?id=10.1371/journal.pone.0174944&type=printable
+https://spectrum.ieee.org/the-human-os/biomedical/diagnostics/ibm-intel-stanford-bet-on-ai-to-speed-up-disease-diagnosis-and-drug-discovery
