@@ -9,3 +9,4 @@ https://towardsdatascience.com/predicting-presence-of-heart-diseases-using-machi
 https://spectrum.ieee.org/the-human-os/biomedical/diagnostics/ai-predicts-heart-attacks-more-accurately-than-standard-doctor-method
  - https://journals.plos.org/plosone/article/file?id=10.1371/journal.pone.0174944&type=printable
 https://spectrum.ieee.org/the-human-os/biomedical/diagnostics/ibm-intel-stanford-bet-on-ai-to-speed-up-disease-diagnosis-and-drug-discovery
+https://archive.ics.uci.edu/ml/datasets/Heart+Disease
