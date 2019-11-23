@@ -12,6 +12,12 @@ X = xlsread('../processedHeart.xlsx'); % read data
 
 %% Perform PCA
 [coeff,score,latent,tsquared,explained,mu] = pca(X);
+figure('name','Relationship Between Features')
+imagesc(coeff)
+colorbar
+
+%% Pearson's R
+
 
 %% Split Data Into Training and Testing Sets
 numFolds = 5;
