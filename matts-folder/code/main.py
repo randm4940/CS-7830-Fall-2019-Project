@@ -77,22 +77,23 @@ def print_count_of_target(target, df):
 
 
 def run_pca(x_scaled):
-    pca = PCA()
+    pca = PCA(n_components=10)
     pca.fit(x_scaled)
     x_pca = pca.transform(x_scaled)
-    print("shape of X_pca", x_pca.shape)
+    return x_pca
+    # print("shape of X_pca", x_pca.shape)
+    #
+    # # Plotting the Cumulative Summation of the Explained Variance
+    # plt.figure()
+    # plt.plot(np.cumsum(pca.explained_variance_ratio_))
+    # plt.xlabel('Number of Components')
+    # plt.ylabel('Variance (%)')  # for each component
+    # plt.title('Explained Variance')
+    # plt.show()
 
-    # Plotting the Cumulative Summation of the Explained Variance
-    plt.figure()
-    plt.plot(np.cumsum(pca.explained_variance_ratio_))
-    plt.xlabel('Number of Components')
-    plt.ylabel('Variance (%)')  # for each component
-    plt.title('Explained Variance')
-    plt.show()
-
-    ex_variance = np.var(x_pca, axis=0)
-    ex_variance_ratio = ex_variance / np.sum(ex_variance)
-    print (ex_variance_ratio)
+    # ex_variance = np.var(x_pca, axis=0)
+    # ex_variance_ratio = ex_variance / np.sum(ex_variance)
+    # print (ex_variance_ratio)
 
 def feature_reduction(df, target):
     # Before feature reduction to remove features that don't impact the output significantly
@@ -158,12 +159,11 @@ def train(df):
         data = shuffled_data.drop('target', axis=1)
         target = shuffled_data['target'].values
         data_values = feature_scaling(data)
+        # PCA
+        data_values = run_pca(data_values)
 
         # Feature Importance
         # feature_importance(data_values, target)
-
-        # PCA
-        # run_pca(transformed_data)
 
         # comment this out for now
         # reduced_data, feature_index = feature_reduction(transformed_data, target)
