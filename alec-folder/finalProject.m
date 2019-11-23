@@ -11,13 +11,13 @@ clear all; close all; clc
 X = xlsread('../processedHeart.xlsx'); % read data
 
 %% Perform PCA
-[coeff,score,latent,tsquared,explained,mu] = pca(X);
+[coeff,score,latent,tsquared,explained,mu] = pca(X(:,1:end-1));
 figure('name','Relationship Between Features')
 imagesc(coeff)
 colorbar
 
 %% Pearson's R
-
+[rho,pval] = corr(X(:,1:end-1));
 
 %% Split Data Into Training and Testing Sets
 numFolds = 5;
