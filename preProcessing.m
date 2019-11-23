@@ -8,7 +8,12 @@
 clear all; close all; clc
 
 % % Load Data
-[X,featureLabels] = xlsread('heart.xlsx'); % read data
+X = xlsread('./alec-folder/heart.xlsx'); % read data
+
+% compute descriptive statistics
+rangeValues = range(X);
+meanValues = mean(X);
+stdValues = std(X);
 
 % % pre-process data
 temp1 = zscore(X(:,1)); % zscore age

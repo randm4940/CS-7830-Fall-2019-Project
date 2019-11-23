@@ -8,14 +8,14 @@
 clear all; close all; clc
 
 %% Load Data
-[X,featureLabels] = xlsread('heart.xlsx'); % read data
-Y = X(:,end); 
-X(:,end) = [];
-yFeatureLabel = featureLabels(:,end);
+X = xlsread('../processedHeart.xlsx'); % read data
+
+%% Perform PCA
+[coeff,score,latent,tsquared,explained,mu] = pca(X);
 
 %% Split Data Into Training and Testing Sets
 numFolds = 5;
-indices = crossvalind('Kfold',Y,numFolds);
+indices = crossvalind('Kfold',X,numFolds);
 
 %% Train Logistic Regression Model to Classify Patients w/ Heart Disease
 for ii = 1:numFolds
