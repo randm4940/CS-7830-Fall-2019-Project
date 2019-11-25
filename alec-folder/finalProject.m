@@ -8,9 +8,10 @@
 clear all; close all; clc
 
 %% Load Pre-Procssed Data
-X = xlsread('../data/processedHeart.xlsx'); % read data
+%X = xlsread('../data/processedHeart.xlsx'); % read data
+X = xlsread('../data/heart.csv'); % read data
 numFolds = 5;
-indices = crossvalind('Kfold',X,numFolds);
+indices = crossvalind('Kfold',X(:,end),numFolds);
 
 %% Analyze Features in Dataset
 % principle component analysis
@@ -20,4 +21,10 @@ imagesc(coeff)
 colorbar
 % pearson's R
 [rho,pval] = corr(X(:,1:end-1));
-
+figure('name','Pearson Correlation')
+imagesc(rho)
+colorbar
+% look for relationships between data points
+figure('name','Scatter Plots')
+plotmatrix(X(:,1:end-1))
+title('Scatter Matrix')
