@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import scikitplot as skplt
+# import scikitplot as skplt
 import seaborn as sns
 from scipy import interp
 from sklearn.decomposition import PCA
@@ -186,6 +186,8 @@ def train(df):
 
         y_true, y_pred = y_test, clf.predict(X_test)
         y_proba = clf.predict_proba(X_test)
+
+        weights = clf.coefs_
 
         print('------------------')
         print('Iteration', i + 1)
