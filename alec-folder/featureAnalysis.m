@@ -9,7 +9,7 @@ clear all; close all; clc
 
 %% Load Pre-Procssed Data
 %x = xlsread('../data/processedHeart.xlsx'); % read data
-X = xlsread('../data/heart.csv'); % read data
+X = xlsread('../data/heart.xlsx'); % read data
 numFolds = 5;
 indices = crossvalind('Kfold',X(:,end),numFolds);
 
