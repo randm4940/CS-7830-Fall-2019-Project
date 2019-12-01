@@ -50,9 +50,6 @@ xlabel('False positive rate')
 ylabel('True positive rate')
 title('ROC for Classification by SVM')
 
-% fuzzy c means
-fuzzConfMat = [29, 4;21 7];
-
 function [accuracy,sensitivity,specificity,precision,f1] = calcConfStats(confusionMatrix)
 TP = confusionMatrix(1);
 TN = confusionMatrix(end);
