@@ -13,6 +13,15 @@ X = xlsread('../data/heart.xlsx'); % read data
 numFolds = 5;
 indices = crossvalind('Kfold',X(:,end),numFolds);
 
+% show distribution of labels
+figure('name','Label Distribution')
+histogram(X(:,end))
+xticks([0,1])
+xticklabels({'False','True'})
+xlabel('Has Heart Disease?')
+ylabel('Frequency')
+title({'Distribution of Labels'})
+
 %% Analyze Features in Dataset
 % principle component analysis
 featureNames = {'age','sex','cp','trestbps','chol','fbs','restecg',...
