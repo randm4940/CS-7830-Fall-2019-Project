@@ -40,7 +40,7 @@ def parameter_optimization(df):
     mlp = MLPClassifier(max_iter=2000)
     parameter_space = {
         'hidden_layer_sizes': [(6,), (7,), (8,), (6, 3),  (6, 4), (5, 3, 2),
-                               (7, 3), ],
+                               (7, 3), (8, 3), (8, 3, 2)],
         'activation': ['tanh', 'relu'],
         'solver': ['lbfgs', 'sgd', 'adam'],
         'alpha': [0.0001, 0.05, 0.01, 1, 10, 20],
@@ -146,7 +146,7 @@ def train(df):
     recalls = []
     f1_scores = []
     accuracies = []
-    sensitivities = []
+    # sensitivities = []
     specificities = []
     roc_auc_scores = []
 
@@ -229,9 +229,9 @@ def train(df):
         print('Recall: ', recall)
         recalls.append(recall)
 
-        sensitivity = conf_matrix[0, 0] / (conf_matrix[0, 0] + conf_matrix[1, 0])
-        print('Sensitivity : ', sensitivity)
-        sensitivities.append(sensitivity)
+        # sensitivity = conf_matrix[0, 0] / (conf_matrix[0, 0] + conf_matrix[1, 0])
+        # print('Sensitivity : ', sensitivity)
+        # sensitivities.append(sensitivity)
 
         specificity = conf_matrix[1, 1] / (conf_matrix[1, 1] + conf_matrix[0, 1])
         print('Specificity : ', specificity)
@@ -258,8 +258,8 @@ def train(df):
     print('Average Precision: ', avg_precision)
     avg_recall = np.mean(recalls)
     print('Average Recall: ', avg_recall)
-    avg_sensitivity = np.mean(sensitivities)
-    print('Average Sensitivity: ', avg_sensitivity)
+    # avg_sensitivity = np.mean(sensitivities)
+    # print('Average Sensitivity: ', avg_sensitivity)
     avg_specificity = np.mean(specificities)
     print('Average Specificity: ', avg_specificity)
     avg_roc_auc_score = np.mean(roc_auc_scores)
@@ -296,6 +296,26 @@ def train(df):
     plt.show()
 
 
+def heatmap_rf():
+    conf_matrix = [[20, 2], [5, 34]]
+
+    # Plot confusion matrix
+    plt.figure(figsize=(10, 7))
+    sns.heatmap(conf_matrix, annot=True)
+    ax = plt.axes()
+    ax.set_title('Random Forest Confusion Matrix')
+    plt.show()
+
+def heatmap_knn():
+    conf_matrix = [[29, 4], [21,  7]]
+
+    # Plot confusion matrix
+    plt.figure(figsize=(10, 7))
+    sns.heatmap(conf_matrix, annot=True)
+    ax = plt.axes()
+    ax.set_title('Fuzzy C-Means Confusion Matrix')
+    plt.show()
+
 if __name__ == "__main__":
     np.random.seed(1)
     df = read_heart_data()
@@ -321,7 +341,8 @@ if __name__ == "__main__":
     # parameter_optimization(df)
 
     train(df)
-
+    heatmap_rf()
+    heatmap_knn()
 
     print('Done')
 
