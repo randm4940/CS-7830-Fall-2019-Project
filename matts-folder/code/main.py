@@ -45,8 +45,7 @@ def parameter_optimization(df):
         'solver': ['lbfgs', 'sgd', 'adam'],
         'alpha': [0.0001, 0.05, 0.01, 1, 10, 20],
         'learning_rate': ['constant', 'adaptive'],
-        'learning_rate_init': [0.001, 0.01, 0.05, 0.1, 0.5],
-        'early_stopping': [True, False]
+        'learning_rate_init': [0.001, 0.01, 0.05, 0.1, 0.5]
     }
 
     from sklearn.model_selection import GridSearchCV
@@ -160,7 +159,7 @@ def train(df):
         target = shuffled_data['target'].values
         data_values = feature_scaling(data)
         # PCA
-        data_values = run_pca(data_values)
+        # data_values = run_pca(data_values)
 
         # Feature Importance
         # feature_importance(data_values, target)
@@ -188,6 +187,7 @@ def train(df):
         y_proba = clf.predict_proba(X_test)
 
         weights = clf.coefs_
+        np.savetxt('../documents/nn-weights.txt', weights, fmt='%s')
 
         print('------------------')
         print('Iteration', i + 1)
@@ -331,6 +331,12 @@ if __name__ == "__main__":
     df['thal'][df['thal'] == 2] = 'fixed defect'
     df['thal'][df['thal'] == 3] = 'reversable defect'
     df['thal'] = df['thal'].astype('object')
+
+    # One-hot encode rest ecg
+    df['restecg'][df['restecg'] == 0] = 'normal'
+    df['restecg'][df['restecg'] == 1] = 'ST-T wave abnormality'
+    df['restecg'][df['restecg'] == 2] = 'left ventricular hypertrophy'
+
     df = pd.get_dummies(df)
 
     pd.set_option('display.max_columns', 25)
