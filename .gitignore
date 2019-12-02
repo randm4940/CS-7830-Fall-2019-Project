@@ -111,3 +111,6 @@ venv.bak/
 
 # Just ignore all of the .idea folder for PyCharm
 .idea
+
+# PPT trash file
+~$presentation.pptx
