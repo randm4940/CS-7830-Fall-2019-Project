@@ -10,3 +10,7 @@ https://spectrum.ieee.org/the-human-os/biomedical/diagnostics/ai-predicts-heart-
  - https://journals.plos.org/plosone/article/file?id=10.1371/journal.pone.0174944&type=printable
 https://spectrum.ieee.org/the-human-os/biomedical/diagnostics/ibm-intel-stanford-bet-on-ai-to-speed-up-disease-diagnosis-and-drug-discovery
 https://archive.ics.uci.edu/ml/datasets/Heart+Disease
+https://www.webmd.com/heart-disease/diagnosing-mri#1
+https://health.costhelper.com/heart-mri.html
+https://www.statista.com/statistics/282401/density-of-magnetic-resonance-imaging-units-by-country/
+https://www.uwhealth.org/health/topic/decisionpoint/coronary-calcium-scan-should-i-have-this-test/av2072.html

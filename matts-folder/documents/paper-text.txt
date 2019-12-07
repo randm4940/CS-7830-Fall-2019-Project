@@ -1,0 +1,34 @@
+Abstract
+-------------
+Heart disease is the leading cause of death in the United States. At present, more than 600,000 people die a year from heart disease <citation>, so there is a growing need to accurately detect and
+diagnose heart disease. Current methods of diagnosis are expensive, invasive aand potentially deadly. The research outlined here aims to understand more about the causes of heart disease, and 
+find an accurate model to predict heart disease in patients using machine learning tecniques that are safer for the patient and less expensive. Multiple models are explored to determine their 
+accuracy in predicting heart disease using patients biometrics and medical test results. Specifically, the models researched are multi-variable logistic regression, support vector machines, 
+multi-layer perceptron, random forest and k-nearest neighbors. The results are then presented and analyzed to determine best fit model with some encouraging conclusions.
+
+
+Introduction
+----------------
+Heart disease research is an increasing research topic because more people die from heart disease every year <citation>. Unfortunately, current tests to detect heart disease are expensive and
+potentially dangerous to the pateint. 
+
+One test that doctors use is cardiac magnetic resonance imaging (MRI), which creates images of the heart and major blood vessels, but the average cost of the
+MRI is between $1000 and $5000 <citation>. Also, in some countries, availability of MRI equipment is limited, and patients may have to wait an extended period of time before an MRI can be 
+taken, which puts the patient at risk during that time <citation>. 
+
+Another standard test is left heart catheterization. In this procedure, a thin tube is passed from the patients wrist, arm, or upper leg into the heart. The catheter is then moved though the 
+aortic value to measure the pressure inside the heart as well as the heart's ability to pump blood <citation>. While this method is fairly accurate, it is extemely invasive and runs the risk of 
+complications or death to the patient. Left heart catheterization has a mortality rate of about 0.05%, or about 500 deaths per year
+in the United States <citation>. 
+
+One newer method of testing for heart disease is the coronary calcium scan. This test uses computed tomography (CT) scans to take pictures of the heart, and then the 
+patient is given a score based on how much calcium is visible from the images. Based on the score, the doctor may recommend additional testing. There are multiple caveats for this test.
+Not all arteries that have early signs of heart disease have calcium, so it has a chance of missing patients that potentially are still at risk. A patient could also get a high score, but not
+necessarily be at risk for heart disease, so the patient may be required to have additional tests that are unnecessary. Also, not all health insurance companies
+pay for this test, so it can be expensive for the patient <citation>. 
+
+Because the current methods of detecting heart disease are expensive and potentially dangerous, it is important to gain more insight to the causes of heart disease so more efficient and safer
+options can be discovered. This research experiment attempts to understand more about heart disease by implementing multiple machine learning algorithms that explore patient biometrics 
+collected from the Cleveland database <citation>. In the next section, the specific biometric features are described. This is followed by section III, where a statistical analysis of features is
+implemented. Based on the feature analysis, data pre-processing methods are explored in section IV. The data is then fed through multiple machine learning models described in section V. The results
+are then reported in section VI, with some discussion points in section VII. General conclusions about the reasearch and results are given in section VIII.
