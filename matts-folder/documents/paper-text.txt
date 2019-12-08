@@ -70,3 +70,18 @@ sufficient records to adequately process. This reduced dataset is the one used i
 - target: Diagnosed with heart disease (1) or not (0)
 
 
+Discussion
+---------------
+
+Overall, the experiment was successful in implementing machine learning algorithms to accurately predict heart disease, but the model that would be selected in a
+medical environment is debatable depending on the importance of false positive (FP) and false negative (FN) predictions and the interpretability of features
+to the predicted output. The random forest model has the best overall accuracy (0.89), as it has the greatest amount of correct predictions, 
+but the k-nearest neighbor model has the best sensitivity rating (0.86 compared to 0.80 from random forest). As sensitivity compares the true positive count (TP) 
+to the false negative count, the higher the sensitivity score, the less likely the model is to incorrectly predict a patient does not have heart disease when a 
+patient could actually be at risk. The random forest model has the highest precision (0.91), which compares the true positive count to the false positive count, 
+so a higher precision would prevent unnecessary additional testing if the patient was incorrectly diagnosed with heart disease. The multi-layer perceptron model 
+did not perform the best in either precision (0.88) or sensitivity (0.85), but is very close to the best results in both, and has the best F1 score (0.87). For this reason, the 
+multi-layer perceptron might be used if both a high precision and sensitivity was desired. The support vector machine model has a high accuracy (0.88), but fairly
+low sensitivity (0.76) and F1 score (0.76), so most likely this model would not be used in a medical environment. The logistic regression model did not perform
+better than the other models, but had a high accuracy (0.88) and precision (0.86), and the model is simple to understand and explain. If interpretability
+was important, this model may be used as opposed to the other "black-box" techniques.
