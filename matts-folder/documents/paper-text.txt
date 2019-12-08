@@ -85,3 +85,20 @@ multi-layer perceptron might be used if both a high precision and sensitivity wa
 low sensitivity (0.76) and F1 score (0.76), so most likely this model would not be used in a medical environment. The logistic regression model did not perform
 better than the other models, but had a high accuracy (0.88) and precision (0.86), and the model is simple to understand and explain. If interpretability
 was important, this model may be used as opposed to the other "black-box" techniques.
+
+
+Conclusion and Future Work
+------------------------------
+
+The goal of this experiment was to research the causes of heart disease and use the gained knowledge and machine learning techniques to accurately
+predict the presence of heart disease in patients. Multiple biometric features were explored and statistical analysis demonstrated potential to predict 
+heart disease using these features. Multiple machine learning models were then configured and analyzed, and the results were promising. Multiple models
+demonstrated high accuracy, and the random forest model resulted in precision and specificity ratings of 0.91 and 0.94 respectively. It is debatable
+which model(s) would be used in a medical environment though, as false positive and false negative rates need to be considered as well as the accuracy.
+
+In future work, more data would be desirable to ensure confidence in the models. The original dataset had many missing features, so more complete data would 
+provide the ability to explore features that weren't included in this experiment. This would be implemented by surveying other hospitals around the United States
+with high diagnosis accuracies for medical data. Acquiring more data for multiple locations would also help eliminate any inherit geographical biases in the 
+data.
+
+Overall, the experiment reports promising results and concludes research into the predictability of heart disease should be further explored.
