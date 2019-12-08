@@ -39,8 +39,8 @@ def parameter_optimization(df):
 
     mlp = MLPClassifier(max_iter=2000)
     parameter_space = {
-        'hidden_layer_sizes': [(6,), (7,), (8,), (6, 3),  (6, 4), (5, 3, 2),
-                               (7, 3), (8, 3), (8, 3, 2)],
+        'hidden_layer_sizes': [(6,), (7,), (8,), (6, 6), (6, 4), (5, 3, 2),
+                               (7, 3), (8, 3), (8, 3, 2), (8, 8), (8, 8, 2), (8, 8, 8), (8, 9), (9,)],
         'activation': ['tanh', 'relu'],
         'solver': ['lbfgs', 'sgd', 'adam'],
         'alpha': [0.0001, 0.05, 0.01, 1, 10, 20],
@@ -48,8 +48,17 @@ def parameter_optimization(df):
         'learning_rate_init': [0.001, 0.01, 0.05, 0.1, 0.5]
     }
 
+    parameter_space_2 = {
+        'hidden_layer_sizes': [(8,), (8, 3), (8, 5), (8, 8), (8, 8, 8)],
+        'activation': ['tanh'],
+        'solver': ['sgd'],
+        'alpha': [0.05],
+        'learning_rate': ['constant'],
+        'learning_rate_init': [0.001]
+    }
+
     from sklearn.model_selection import GridSearchCV
-    clf = GridSearchCV(mlp, parameter_space, n_jobs=-1, cv=3)
+    clf = GridSearchCV(mlp, parameter_space_2)
     clf.fit(X_train, y_train)
 
     # Best parameter set
@@ -347,8 +356,8 @@ if __name__ == "__main__":
     # parameter_optimization(df)
 
     train(df)
-    heatmap_rf()
-    heatmap_knn()
+    # heatmap_rf()
+    # heatmap_knn()
 
     print('Done')
 

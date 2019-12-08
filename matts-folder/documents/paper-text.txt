@@ -102,3 +102,25 @@ with high diagnosis accuracies for medical data. Acquiring more data for multipl
 data.
 
 Overall, the experiment reports promising results and concludes research into the predictability of heart disease should be further explored.
+
+
+Multi-layer Perceptron
+-------------------------
+
+In this experiment, a multi-layer perceptron (MLP) neural network model is tested. The MLP is a four-layer network (one input layer, two hidden
+layers, and one output layer). The input layer has 21 nodes (in accordance to the 21 features), the first hidden layer has 8 nodes, the second hidden layer
+has 3 nodes, and the final output layer has one node. To determine the number of hidden nodes, as well as other parameters including learning rate, 
+regularization, and activation function, an parameter suite was configured with multiple options for each parameter to explore. 
+The neural network is exhaustively tested with each combination of parameters in the suite, and the best resulting model is then reported. The parameter suite
+is as follows <insert screenshot>.
+
+The best resulting parameters from this exhaustive test is as follows:
+<insert screenshot>
+
+The activation function chosen, hyperbolic tangent (tanh), is a re-scaled version of a sigmoid function so the range of the sigmoid is between -1 and 1.
+<insert function>
+There are multiple reasons to chose this activation function over a normal sigmoid. The data that is fed into the neural network is z-score normalized
+(zero mean and unit variance), so it seems natural to pick an activation function that is also within that scale as to not introduce a systematic bias.
+Also, because the range of the hyperbolic tangent function is larger than that of a regular sigmoid, the gradients along the curve will be larger, 
+thus resulting in the algorithm converging to a local minima faster (larger increases or decreases in weights). 
+A graphical comparison of the hyperbolic tangent function to a normal sigmoid can be seen below <insert screenshot>.
