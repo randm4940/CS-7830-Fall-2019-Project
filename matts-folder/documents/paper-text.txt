@@ -10,14 +10,14 @@ multi-layer perceptron, random forest and k-nearest neighbors. The results are t
 Introduction
 ----------------
 Heart disease research is an increasing research topic because more people die from heart disease every year <citation>. Unfortunately, current tests to detect heart disease are expensive and
-potentially dangerous to the pateint. 
+potentially dangerous to the patient. 
 
 One test that doctors use is cardiac magnetic resonance imaging (MRI), which creates images of the heart and major blood vessels, but the average cost of the
 MRI is between $1000 and $5000 <citation>. Also, in some countries, availability of MRI equipment is limited, and patients may have to wait an extended period of time before an MRI can be 
 taken, which puts the patient at risk during that time <citation>. 
 
 Another standard test is left heart catheterization. In this procedure, a thin tube is passed from the patients wrist, arm, or upper leg into the heart. The catheter is then moved though the 
-aortic value to measure the pressure inside the heart as well as the heart's ability to pump blood <citation>. While this method is fairly accurate, it is extemely invasive and runs the risk of 
+aortic value to measure the pressure inside the heart as well as the heart's ability to pump blood <citation>. While this method is fairly accurate, it is extremely invasive and runs the risk of 
 complications or death to the patient. Left heart catheterization has a mortality rate of about 0.05%, or about 500 deaths per year
 in the United States <citation>. 
 
@@ -31,4 +31,40 @@ Because the current methods of detecting heart disease are expensive and potenti
 options can be discovered. This research experiment attempts to understand more about heart disease by implementing multiple machine learning algorithms that explore patient biometrics 
 collected from the Cleveland database <citation>. In the next section, the specific biometric features are described. This is followed by section III, where a statistical analysis of features is
 implemented. Based on the feature analysis, data pre-processing methods are explored in section IV. The data is then fed through multiple machine learning models described in section V. The results
-are then reported in section VI, with some discussion points in section VII. General conclusions about the reasearch and results are given in section VIII.
+are then reported in section VI, with some discussion points in section VII. General conclusions about the research and results are given in section VIII.
+
+
+Description of Features
+-----------------------------
+
+The data used in the research was recorded by the V.A. Medical Center, Long Beach and Cleveland Clinic Foundation <citation>. The original dataset contains 
+76 features (biometrics) across 303 patients, but the data was reduced to 14 features by the owners to remove biometrics that were incomplete or did not have 
+sufficient records to adequately process. This reduced dataset is the one used in this study. The 14 features that were explored were:
+- age: Age in years
+- sex: Male (1) or female (0)
+- cp: Chest pain type
+    - 0: Asymptotic
+    - 1: Atypical angina
+    - 2: Non-Anginal pain
+    - 3: Typical angina
+- trestbps: Resting blood pressure (mm Hg)
+- chol: Serum cholesterol (mg/dl)
+- fbs: Fasting blood sugar > 120 mg/dl (1 = true, 0 = false)
+- restecg: Resting electrocardiogram results
+    - 0: Showing probable or definite left ventricular hypertrophy by Estes' criteria
+    - 1: Normal
+    - 2: Having ST-T wave abnormality (T wave inversions and/or ST elevation of depression of > 0.05 mV)
+- thalach: Maximum heart rate achieved during stress test
+- exang: Exercise induced angina (1 = yes, 0 = no)
+- oldpeak: ST depression induced by exercise relative to rest
+- slope: The slope of the peak exercise ST segment relative to rest
+    0: Downsloping
+    1: Flat
+    2: Upsloping
+- ca: Number of major vessels (0-3) colored by fluoroscopy.
+- thal: Thalassemia blood disorder:
+    0: Unknown
+    1: Fixed defect
+    2: Normal
+    3: Reversible defect
+- target: Diagnosed with heart disease (1) or not (0)
