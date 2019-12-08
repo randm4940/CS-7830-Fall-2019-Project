@@ -1,8 +1,8 @@
 Abstract
 -------------
 Heart disease is the leading cause of death in the United States. At present, more than 600,000 people die a year from heart disease <citation>, so there is a growing need to accurately detect and
-diagnose heart disease. Current methods of diagnosis are expensive, invasive aand potentially deadly. The research outlined here aims to understand more about the causes of heart disease, and 
-find an accurate model to predict heart disease in patients using machine learning tecniques that are safer for the patient and less expensive. Multiple models are explored to determine their 
+diagnose heart disease. Current methods of diagnosis are expensive, invasive and potentially deadly. The research outlined here aims to understand more about the causes of heart disease, and 
+find an accurate model to predict heart disease in patients using machine learning techniques that are safer for the patient and less expensive. Multiple models are explored to determine their 
 accuracy in predicting heart disease using patients biometrics and medical test results. Specifically, the models researched are multi-variable logistic regression, support vector machines, 
 multi-layer perceptron, random forest and k-nearest neighbors. The results are then presented and analyzed to determine best fit model with some encouraging conclusions.
 
@@ -68,3 +68,5 @@ sufficient records to adequately process. This reduced dataset is the one used i
     2: Normal
     3: Reversible defect
 - target: Diagnosed with heart disease (1) or not (0)
+
+
